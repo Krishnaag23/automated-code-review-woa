@@ -1,0 +1,28 @@
+{
+  "name": "automated-code-review-woa",
+  "version": "1.0.0",
+  "description": "- Krishna Agarwal   - Ashish Upadhyay",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "server": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashishu23/automated-code-review-woa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashishu23/automated-code-review-woa/issues"
+  },
+  "homepage": "https://github.com/ashishu23/automated-code-review-woa#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "octokit": "^4.0.3"
+  },
+  "devDependencies": {
+    "smee-client": "^2.0.4"
+  }
+}
