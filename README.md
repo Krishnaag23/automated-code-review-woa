@@ -1,6 +1,6 @@
 # **automated-code-review-woa**
 
-How to run :
+To run :
 
 <pre><code>npm run server</code></pre>
 <button onclick="copyToClipboard('npm run server')"></button>
