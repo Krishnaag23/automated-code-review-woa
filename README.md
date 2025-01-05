@@ -1,8 +1,13 @@
 # **automated-code-review-woa**
 
-`npm run server`
+How to run :
 
-`npx smee -u https://smee.io/UFFhwrdYvgQ1teW -t http://localhost:3000/api/webhook`
+<pre><code>npm run server</code></pre>
+<button onclick="copyToClipboard('npm run server')">Copy</button>
+
+<pre><code>npx smee -u https://smee.io/UFFhwrdYvgQ1teW -t http://localhost:3000/api/webhook</code></pre>
+<button onclick="copyToClipboard('npx smee -u https://smee.io/UFFhwrdYvgQ1teW -t http://localhost:3000/api/webhook')">Copy</button>
+
 
 ## **Innovators/Developers​**
 - Krishna Agarwal  
