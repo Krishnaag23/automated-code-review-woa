@@ -1,0 +1,5 @@
+summary: Fetch many BatchProcess
+tasks:
+  - id: schema_batchprocess_search
+    fn: datasource.schema.BatchProcess.findMany
+    args: {}

@@ -1,0 +1,9 @@
+id: trigger_merge
+tasks:
+  - id: create_merge_request
+    fn: datasource.git.post./repos/<owner>/<repo>/pulls
+    args:
+      title: 'Automated Code Review Suggestions'
+      body: 'Merge suggestions from the automated code review system.'
+      head: 'review-suggestions'
+      base: 'main'

@@ -1,0 +1,7 @@
+summary: Fetch BatchProcess
+tasks:
+  - id: schema_batchprocess_one
+    fn: datasource.schema.BatchProcess.findUnique
+    args:
+      where:
+        id: <% parseInt(inputs.params.id) %>

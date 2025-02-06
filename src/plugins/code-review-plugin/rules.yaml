@@ -1,0 +1,7 @@
+rules:
+  - name: No console.log statements
+    pattern: 'console.log'
+    severity: warning
+  - name: Functions should have comments
+    pattern: "(?<!\\*)\\nfunction\\s+\\w+\\s*\\("
+    severity: warning

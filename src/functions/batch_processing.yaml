@@ -1,0 +1,12 @@
+id: batch_processing_workflow
+tasks:
+  - id: split_files
+    fn: com.gs.split
+    args:
+      list: <% inputs.files %>
+      size: 10
+  - id: process_batch
+    fn: code_review_workflow
+    args:
+      repo_id: <% inputs.repo_id %>
+      files: <% outputs.split_files.data %>

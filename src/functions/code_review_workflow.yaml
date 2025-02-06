@@ -1,0 +1,26 @@
+id: code_review_workflow
+description: Automated code review workflow
+
+tasks:
+  - id: fetch_repo_files
+    fn: datasource.git.get./repos/<%inputs.body.owner%>/<%inputs.body.repo%>/pulls/<%inputs.body.pr_id%>/files
+    args:
+      headers:
+        Authorization: <% `Bearer ${config.github.token}` %>
+        Accept: application/vnd.github.v3+json
+      skipAuth: true
+
+  - id: analyze_files
+    fn: codeReview
+    args:
+      content: <% outputs.fetch_repo_files.data[0].patch || '' %>
+      filename: <% outputs.fetch_repo_files.data[0].filename %>
+      language: <% inputs.body.language || 'JavaScript' %>
+
+  - id: store_results
+    fn: save_results
+    args:
+      data:
+        repoId: <% inputs.body.repo_id %>
+        filePath: <% outputs.fetch_repo_files.data[0].filename %>
+        issues: <% JSON.stringify(outputs.analyze_files.data) %>

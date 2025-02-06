@@ -1,0 +1,11 @@
+type: axios
+base_url: https://api.github.com
+curlifiedLogs: true
+authn: false
+headers:
+  Authorization: <% `Bearer ${config.github.token}` %>
+mappings:
+  get_pull_request_files:
+    method: get
+    endpoint: /repos/<% inputs.owner %>/<% inputs.repo %>/pulls/<% inputs.pr_id %>/files
+    url: <% this.base_url + this.endpoint %>
