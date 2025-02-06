@@ -1,0 +1,77 @@
+http.post./webhook:
+  fn: code_review_workflow
+  authn: false
+  body:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - repo_id
+            - repo
+            - owner
+            - pr_id
+          properties:
+            owner:
+              type: string
+              description: GitHub repo owner
+            repo:
+              type: string
+              description: Repository name
+            repo_id:
+              type: string
+              description: Repository ID
+            pr_id:
+              type: string
+              description: Pull request number
+            language:
+              type: string
+              description: Programming language
+              default: JavaScript
+        example:
+          owner: 'username'
+          repo: 'repo-name'
+          repo_id: '12345'
+          pr_id: '1'
+          language: 'JavaScript'
+
+  responses:
+    200:
+      description: Webhook successfully processed.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the webhook was processed successfully.
+              message:
+                type: string
+                description: A success message or additional details.
+    400:
+      description: Invalid request payload.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              error:
+                type: string
+                description: Error message detailing what went wrong.
+    500:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              error:
+                type: string
+                description: Error message detailing the server issue.

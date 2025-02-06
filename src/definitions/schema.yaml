@@ -1,0 +1,23 @@
+ReviewResult:
+  type: object
+  properties:
+    repoId:
+      type: string
+    filePath:
+      type: string
+    issues:
+      type: object
+      nullable: true
+    createdAt:
+      type: string
+      format: date-time
+BatchProcess:
+  type: object
+  properties:
+    batchId:
+      type: string
+    status:
+      type: string
+    createdAt:
+      type: string
+      format: date-time

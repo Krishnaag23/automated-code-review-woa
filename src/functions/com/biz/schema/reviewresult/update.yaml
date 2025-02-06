@@ -1,0 +1,8 @@
+summary: Update ReviewResult
+tasks:
+  - id: schema_reviewresult_update
+    fn: datasource.schema.ReviewResult.update
+    args:
+      where:
+        id: <% parseInt(inputs.params.id) %>
+      data: <% inputs.body %>

@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+
+  output          = "./prisma-clients/schema"
+  previewFeatures = ["metrics"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model ReviewResult {
+  id        Int      @id @default(autoincrement())
+  repoId    String
+  filePath  String
+  issues    Json
+  createdAt DateTime @default(now())
+}
+
+model BatchProcess {
+  id        Int      @id @default(autoincrement())
+  batchId   String
+  status    String
+  createdAt DateTime @default(now())
+}
