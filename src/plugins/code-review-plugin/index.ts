@@ -108,7 +108,7 @@ export default class CodeReviewPlugin extends GSDataSource {
     if (apiKey.startsWith('AI')) {
       this.llmProvider = new GoogleGenerativeAI(apiKey);
       this.model = this.llmProvider.getGenerativeModel({ model: 'gemini-pro' });
-    } else if (apiKey.startsWith('openai_')) {
+    } else if (apiKey.startsWith('sw-')) {
       const { Configuration, OpenAIApi } = require('openai');
       const configuration = new Configuration({ apiKey });
       this.llmProvider = new OpenAIApi(configuration);
