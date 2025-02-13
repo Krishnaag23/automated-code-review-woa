@@ -1,6 +1,0 @@
-summary: Create BatchProcess
-tasks:
-  - id: schema_batchprocess_create
-    fn: datasource.schema.BatchProcess.create
-    args:
-      data: <% inputs.body %>

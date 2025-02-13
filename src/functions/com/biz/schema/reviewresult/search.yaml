@@ -1,5 +1,0 @@
-summary: Fetch many ReviewResult
-tasks:
-  - id: schema_reviewresult_search
-    fn: datasource.schema.ReviewResult.findMany
-    args: {}

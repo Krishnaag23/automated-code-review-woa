@@ -1,2 +1,0 @@
-type: prisma
-connection_url: ${config.database.url}

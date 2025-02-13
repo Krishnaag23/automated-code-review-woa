@@ -1,6 +1,0 @@
-summary: Create ReviewResult
-tasks:
-  - id: schema_reviewresult_create
-    fn: datasource.schema.ReviewResult.create
-    args:
-      data: <% inputs.body %>

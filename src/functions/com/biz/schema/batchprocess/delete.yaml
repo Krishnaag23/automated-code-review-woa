@@ -1,7 +1,0 @@
-summary: Delete BatchProcess
-tasks:
-  - id: schema_batchprocess_delete
-    fn: datasource.schema.BatchProcess.delete
-    args:
-      where:
-        id: <% parseInt(inputs.params.id) %>
