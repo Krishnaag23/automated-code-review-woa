@@ -63,6 +63,7 @@ export default class CodeReviewPlugin extends GSDataSource {
   private octokit: Octokit;
   private model: any;
   private eslint: ESLint;
+  private llmProvider: any;
 
   constructor(config: PlainObject) {
     super(config);
@@ -91,6 +92,33 @@ export default class CodeReviewPlugin extends GSDataSource {
 
     return new ESLint(options);
   }
+  async initKeys(github_token: string, llm_api_key: string) {
+    if (!github_token) {
+      throw new Error('GitHub token is required for repository access.');
+    }
+    this.octokit = new Octokit({ auth: github_token });
+
+    if (!llm_api_key) {
+      throw new Error('LLM API key is required for code review analysis.');
+    }
+
+    this.initLLMProvider(llm_api_key);
+  }
+  private initLLMProvider(apiKey: string) {
+    if (apiKey.startsWith('AI')) {
+      this.llmProvider = new GoogleGenerativeAI(apiKey);
+      this.model = this.llmProvider.getGenerativeModel({ model: 'gemini-pro' });
+    } else if (apiKey.startsWith('openai_')) {
+      const { Configuration, OpenAIApi } = require('openai');
+      const configuration = new Configuration({ apiKey });
+      this.llmProvider = new OpenAIApi(configuration);
+      this.model = this.llmProvider.createChatCompletion;
+    } else {
+      throw new Error(
+        'Unsupported LLM provider. Please provide a valid API key.',
+      );
+    }
+  }
 
   async initClient(): Promise<PlainObject> {
     const result: PlainObject = {
@@ -98,26 +126,26 @@ export default class CodeReviewPlugin extends GSDataSource {
       githubClientInitialized: false,
     };
 
-    try {
-      const geminiKey = process.env.GEMINI_API_KEY;
-      if (geminiKey) {
-        this.geminiAI = new GoogleGenerativeAI(geminiKey);
-        this.model = this.geminiAI.getGenerativeModel({ model: 'gemini-pro' });
-        result.geminiAIInitialized = true;
-      }
-    } catch (error) {
-      logger.warn('Failed to initialize Gemini AI:', error);
-    }
+    // try {
+    //   const geminiKey = process.env.GEMINI_API_KEY;
+    //   if (geminiKey) {
+    //     this.geminiAI = new GoogleGenerativeAI(geminiKey);
+    //     this.model = this.geminiAI.getGenerativeModel({ model: 'gemini-pro' });
+    //     result.geminiAIInitialized = true;
+    //   }
+    // } catch (error) {
+    //   logger.warn('Failed to initialize Gemini AI:', error);
+    // }
 
-    try {
-      const githubToken = process.env.GITHUB_TOKEN;
-      if (githubToken) {
-        this.octokit = new Octokit({ auth: githubToken });
-        result.githubClientInitialized = true;
-      }
-    } catch (error) {
-      logger.warn('Failed to initialize GitHub client:', error);
-    }
+    // try {
+    //   const githubToken = process.env.GITHUB_TOKEN;
+    //   if (githubToken) {
+    //     this.octokit = new Octokit({ auth: githubToken });
+    //     result.githubClientInitialized = true;
+    //   }
+    // } catch (error) {
+    //   logger.warn('Failed to initialize GitHub client:', error);
+    // }
 
     return result;
   }
@@ -306,18 +334,18 @@ export default class CodeReviewPlugin extends GSDataSource {
       fs.writeFileSync(tempFilePath, code, 'utf8');
 
       // Update tsconfig.json to include the temp directory
-      const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
-      let tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+      // const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
+      // let tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
 
-      if (!tsconfig.include) {
-        tsconfig.include = [];
-      }
+      // if (!tsconfig.include) {
+      //   tsconfig.include = [];
+      // }
 
-      const tempDirRelative = path.relative(process.cwd(), tempDir);
-      if (!tsconfig.include.includes(tempDirRelative)) {
-        tsconfig.include.push(path.join(tempDirRelative, '*.ts'));
-        fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2));
-      }
+      // const tempDirRelative = path.relative(process.cwd(), tempDir);
+      // if (!tsconfig.include.includes(tempDirRelative)) {
+      //   tsconfig.include.push(path.join(tempDirRelative, '*.ts'));
+      //   fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2));
+      // }
 
       logger.debug(
         `Running ESLint analysis for temporary file: ${tempFilePath}`,
@@ -618,10 +646,7 @@ export default class CodeReviewPlugin extends GSDataSource {
     if (!this.model) return ['AI analysis unavailable'];
 
     try {
-      const prompt = `As an expert code reviewer and senior software engineer specializing in ${language}, 
-analyze the following code:
-
-${code}
+      const prompt = `As an expert code reviewer and senior software engineer specializing in ${language}, analyze the following code:${code}
 
 Provide analysis covering:
 1. Code quality (1-10)
@@ -634,9 +659,18 @@ Provide analysis covering:
 8. Suggested improvements
 
 Use markdown for code examples.`;
+      let text = '';
+      if (this.llmProvider instanceof GoogleGenerativeAI) {
+        const result = await this.model.generateContent(prompt);
+        text = await result.response.text();
+      } else {
+        const result = await this.model({
+          model: 'gpt-4',
+          messages: [{ role: 'system', content: prompt }],
+        });
+        text = result.data.choices[0].message.content;
+      }
 
-      const result = await this.model.generateContent(prompt);
-      const text = await result.response.text();
       return text.split('\n').filter((line: string) => line.trim());
     } catch (error) {
       logger.error('AI analysis failed:', error);
