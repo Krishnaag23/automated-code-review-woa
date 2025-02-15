@@ -1,4 +1,4 @@
-http.post./webhook:
+http.post./review:
   fn: code_review_workflow
   authn: false
   body:
@@ -11,6 +11,8 @@ http.post./webhook:
             - repo
             - owner
             - pr_id
+            - github_token
+            - llm_api_key
           properties:
             owner:
               type: string
@@ -28,12 +30,20 @@ http.post./webhook:
               type: string
               description: Programming language
               default: JavaScript
+            github_token:
+              type: string
+              description: GitHub API Token for authentication
+            llm_api_key:
+              type: string
+              description: API key for accessing the LLM service
         example:
           owner: 'username'
           repo: 'repo-name'
           repo_id: '12345'
           pr_id: '1'
           language: 'JavaScript'
+          github_token: 'ghp_xxx'
+          llm_api_key: 'llm_xxx'
 
   responses:
     200:

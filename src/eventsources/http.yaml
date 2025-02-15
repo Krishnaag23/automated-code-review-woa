@@ -1,5 +1,10 @@
 type: express
 port: 3000
+cors:
+  enabled: true
+  origin: '*' # Allows all origins; change to specific domains if needed
+  methods: 'GET,POST,PUT,DELETE,OPTIONS'
+  headers: 'Content-Type, Authorization'
 # base_url: /api/v1 #the base url of the http service
 
 #Bassic swagger setup
@@ -18,7 +23,7 @@ docs:
       name: Apache 2.0
       url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   servers:
-    - url: 'http://localhost:3000'
+    - url: 'https://automated-code-review-woa.onrender.com'
       description: Public API server
     - url: 'http://localhost:3001'
       description: Internal API server

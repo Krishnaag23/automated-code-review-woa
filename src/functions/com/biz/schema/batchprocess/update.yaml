@@ -1,8 +1,0 @@
-summary: Update BatchProcess
-tasks:
-  - id: schema_batchprocess_update
-    fn: datasource.schema.BatchProcess.update
-    args:
-      where:
-        id: <% parseInt(inputs.params.id) %>
-      data: <% inputs.body %>

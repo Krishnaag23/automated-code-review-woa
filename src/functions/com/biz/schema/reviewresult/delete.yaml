@@ -1,7 +1,0 @@
-summary: Delete ReviewResult
-tasks:
-  - id: schema_reviewresult_delete
-    fn: datasource.schema.ReviewResult.delete
-    args:
-      where:
-        id: <% parseInt(inputs.params.id) %>

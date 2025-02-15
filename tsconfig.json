@@ -14,19 +14,7 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": [
-    "./node_modules"
-  ],
+  "exclude": ["./node_modules"],
   "name": "automated-code-review-woa",
-  "include": [
-    "eslint-analysis\\*.ts",
-    "eslint-analysis\\*.ts",
-    "eslint-analysis\\*.ts",
-    "eslint-analysis\\*.ts",
-    "eslint-analysis\\*.ts",
-    "eslint-analysis\\*.ts",
-    "eslint-analysis\\*.ts",
-    "eslint-analysis\\*.ts",
-    "eslint-analysis\\*.ts"
-  ]
+  "include": ["eslint-analysis\\*.ts"]
 }

@@ -3,19 +3,25 @@ import { logger, PlainObject, GSContext } from '@godspeedsystems/core';
 
 export default async function codeReview(ctx: GSContext, args: PlainObject) {
   try {
-    const { filePath, language = 'javascript' } = args;
+    const {
+      filePath,
+      language = 'javascript',
+      llm_api_key,
+      github_token,
+    } = args;
     const codeSnippet = args.content as string;
-    // Validate required inputs
+
     if (!codeSnippet) {
       throw new Error("'codeSnippet' is required");
     }
 
-    // Initialize plugin with proper configuration
-    const pluginInstance = new CodeReviewPlugin({
-      // Add any required plugin config here from .env
-    });
+    if (!llm_api_key) {
+      throw new Error("'llm_api_key' is required for LLM-based code analysis");
+    }
 
-    // Execute the review_code action with properly structured payload
+    const pluginInstance = new CodeReviewPlugin({});
+    pluginInstance.initKeys(github_token, llm_api_key);
+
     const reviewResult = await pluginInstance.execute(ctx, {
       action: 'review_code',
       payload: {
@@ -25,7 +31,6 @@ export default async function codeReview(ctx: GSContext, args: PlainObject) {
       },
     });
 
-    // Add additional processing if needed
     const formattedResult = {
       file: reviewResult.filename,
       issues: [

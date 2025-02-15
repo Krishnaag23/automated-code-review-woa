@@ -2,8 +2,8 @@ type: axios
 base_url: https://api.github.com
 curlifiedLogs: true
 authn: false
-headers:
-  Authorization: <% `Bearer ${config.github.token}` %>
+# headers:
+#   Authorization: <% `Bearer ${config.github.token}` %>
 mappings:
   get_pull_request_files:
     method: get

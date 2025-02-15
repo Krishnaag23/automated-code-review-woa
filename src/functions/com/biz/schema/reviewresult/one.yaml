@@ -1,7 +1,0 @@
-summary: Fetch ReviewResult
-tasks:
-  - id: schema_reviewresult_one
-    fn: datasource.schema.ReviewResult.findUnique
-    args:
-      where:
-        id: <% parseInt(inputs.params.id) %>
