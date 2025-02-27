@@ -25,7 +25,7 @@ docs:
   servers:
     - url: 'https://automated-code-review-woa.onrender.com'
       description: Public API server
-    - url: 'http://localhost:3001'
+    - url: 'http://localhost:3000'
       description: Internal API server
 
 request_body_limit: 20000 # maximum size of the request body (in bytes)

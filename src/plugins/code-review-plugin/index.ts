@@ -107,7 +107,9 @@ export default class CodeReviewPlugin extends GSDataSource {
   private initLLMProvider(apiKey: string) {
     if (apiKey.startsWith('AI')) {
       this.llmProvider = new GoogleGenerativeAI(apiKey);
-      this.model = this.llmProvider.getGenerativeModel({ model: 'gemini-pro' });
+      this.model = this.llmProvider.getGenerativeModel({
+        model: 'gemini-2.0-flash',
+      });
     } else if (apiKey.startsWith('sw-')) {
       const { Configuration, OpenAIApi } = require('openai');
       const configuration = new Configuration({ apiKey });
@@ -646,19 +648,47 @@ export default class CodeReviewPlugin extends GSDataSource {
     if (!this.model) return ['AI analysis unavailable'];
 
     try {
-      const prompt = `As an expert code reviewer and senior software engineer specializing in ${language}, analyze the following code:${code}
+      const prompt = `As an expert code reviewer and senior software engineer specializing in ${language}, analyze the following code:
+  
+${code}
 
-Provide analysis covering:
-1. Code quality (1-10)
-2. Critical issues
-3. Security concerns
-4. Performance observations
-5. Code structure
-6. Specific recommendations
-7. Positive aspects
-8. Suggested improvements
+Provide a structured analysis with the following EXACT sections (use these exact headings) no other bullshit allowed:
 
-Use markdown for code examples.`;
+1. Code Quality
+   - Give a complexity score (0-10 where 0 is optimal, 10 is highly complex)
+   - Provide brief quality assessment
+
+2. Issues Found
+   - List each issue with the following information:
+     - Type: "security" for security concerns, "lint" for style issues, or "codesmell" for bad practices
+     - Message: Clear description of the issue
+     - Line: Specify line number when possible
+
+3. Technical Analysis
+   - Performance observations
+   - Code structure evaluation
+   - Architectural considerations
+
+4. Positive Aspects
+   - Highlight well-implemented patterns and practices
+
+5. Security Evaluation
+   - Identify any security vulnerabilities or concerns
+
+6. Performance Review
+   - Note any performance bottlenecks or optimization opportunities
+
+7. Best Practices
+   - Highlight adherence to or deviation from industry standards
+
+8. Suggested Improvements:
+\`\`\`${language}
+// Provide specific code improvements here
+// Format as complete, replacement code snippets
+// Use proper syntax highlighting
+\`\`\`
+
+Format the "Suggested Improvements" section exactly as shown above, with the code block immediately following the heading.`;
       let text = '';
       if (this.llmProvider instanceof GoogleGenerativeAI) {
         const result = await this.model.generateContent(prompt);
@@ -674,7 +704,8 @@ Use markdown for code examples.`;
       return text.split('\n').filter((line: string) => line.trim());
     } catch (error) {
       logger.error('AI analysis failed:', error);
-      return ['AI analysis temporarily unavailable'];
+      const err = error as Error;
+      return [`AI analysis failed: ${err.message}`];
     }
   }
 
