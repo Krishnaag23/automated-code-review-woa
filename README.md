@@ -13,6 +13,12 @@ The **Automated Code Review Project** is a powerful tool designed to automate an
 - **Language Parsing**: Supports parsing of JavaScript, TypeScript, and Python using [Babel Parser](https://babeljs.io/).
 - **Workflow Automation**: Defines tasks for fetching repository files, analyzing code, and storing review results.
 
+## 🚀 Live Demo & Resources
+
+- **🔗 API Docs**: [Check it out here](https://automated-code-review-woa.onrender.com/api-docs/)
+- **💻 Live Demo**: [Explore the UI](https://automated-code-review-frontend-ten.vercel.app/)
+- **📝 Medium Article**: [Read the full story](https://medium.com/@krishnaagrawal5002/revolutionizing-code-reviews-our-journey-with-godspeeds-winter-of-ai-5fda2cde7a3e)
+
 ## Getting Started
 
 ### Installation
